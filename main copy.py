@@ -1,6 +1,5 @@
 # Carpeta que permite ocultar la contraseña al ingresarla
 import getpass
-# import numpy as np
 
 USUARIOS = []
 
@@ -15,13 +14,13 @@ def cargaU(arr):
     us.append(4) 
     us.append("localA@shopping.com") 
     us.append("AAAA1111") 
-    us.append("dueñoLocal") 
+    us.append("dueño") 
     arr.append(us)    
     us = []
     us.append(6) 
     us.append("localB@shopping.com") 
     us.append("BBBB2222") 
-    us.append("dueñoLocal") 
+    us.append("dueño") 
     arr.append(us)
     us = []
     us.append(9) 
@@ -165,7 +164,7 @@ def gestionDeLocales():
             e) Volver.
         ''')
         eleccion = input("Seleccione una opción: ")
-        while eleccion != 'a' and eleccion != 'b' and eleccion != 'c' and eleccion != 'd':
+        while eleccion != 'a' and eleccion != 'b' and eleccion != 'c' and eleccion != 'd' and eleccion != 'e':
             print("Elección no válida.")
             eleccion = input("Seleccione una opción: ")
         match eleccion:
@@ -219,14 +218,17 @@ def gestionDeLocales():
                         print(l)
                 print("En construcción...")
                 menuPrincipalAdmin()
-            case 'd': #seguir esto
+            case 'd': 
                 verlos = input("Desea ver los locales ya cargados? Si/No")
                 if verlos == "Si" or verlos == "si":
                     print("Todos los locales: ")
                     for l in locales: 
                         print(l)
                 menuPrincipalAdmin()
- 
+            case 'e':
+                print("Volviendo... ")
+                menuPrincipalAdmin()
+                           
 # Procedure que permite al admin administrar novedades, en construcción 
 def gestionDeNovedades():
     print('''
@@ -266,7 +268,22 @@ def menuPrincipalDue():
         3- Reporte de uso de descuentos.
         0- Salir.
     ''')
-    #en construccion y volver
+    eleccion = input("Seleccione una número: ")
+    while eleccion != '1' and eleccion != '2' and eleccion != '3' and eleccion != '0':
+        print("Elección no válida.")
+        eleccion = input("Seleccione una opción: ")
+    match eleccion:
+        case '0':
+            print("Saliendo.")
+        case '1':
+            print("En construcción...")
+            menuPrincipalDue()
+        case '2':
+            print("En construcción...")
+            menuPrincipalDue()
+        case '3':
+            print("En construcción...")
+            menuPrincipalDue()
 
 def menuPrincipalCli():
     print('''
@@ -276,9 +293,26 @@ def menuPrincipalCli():
         4- Ver novedades.
         0- Salir.
     ''')
-    #en construccion y volver
+    eleccion = input("Seleccione una número: ")
+    while eleccion != '1' and eleccion != '2' and eleccion != '3' and eleccion != '4' and eleccion != '0':
+        print("Elección no válida.")
+        eleccion = input("Seleccione una opción: ")
+    match eleccion:
+        case '0':
+            print("Saliendo.")
+        case '1':
+            print("En construcción...")
+            menuPrincipalCli()
+        case '2':
+            print("En construcción...")
+            menuPrincipalCli()
+        case '3':
+            print("En construcción...")
+            menuPrincipalCli()
+        case '4':
+            print("En construcción...")
+            menuPrincipalCli()
     
- 
 # Qué rubro tiene más y menos locales    
 def maxMinLocales(x):
     global ind, perf, com
@@ -299,8 +333,7 @@ def maxMinLocales(x):
     separacion()
                 
 if aux == 1:
-    #print("Bienvenido!")
-    print(tdc)
+    print("Bienvenido "+tdc+"!")
     match tdc:
         case "administrador":
             menuPrincipalAdmin()
