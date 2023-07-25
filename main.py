@@ -1,6 +1,5 @@
 # Carpeta que permite ocultar la contraseña al ingresarla
 import getpass
-# import numpy as np
 
 USUARIOS = []
 
@@ -15,13 +14,13 @@ def cargaU(arr):
     us.append(4) 
     us.append("localA@shopping.com") 
     us.append("AAAA1111") 
-    us.append("dueñoLocal") 
+    us.append("dueño") 
     arr.append(us)    
     us = []
     us.append(6) 
     us.append("localB@shopping.com") 
     us.append("BBBB2222") 
-    us.append("dueñoLocal") 
+    us.append("dueño") 
     arr.append(us)
     us = []
     us.append(9) 
@@ -41,7 +40,7 @@ intentos = 1
 aux = 0
 tdc = ""
 codu = 0
-locales = [[0, 0, 0, 0, 0, 0]]*50
+locales = [[0, 0, 0, 0, 0, 0, "B"]]*50
 c = 0
 ind = 0
 perf = 0
@@ -51,6 +50,13 @@ for i in range(50):
     locales[i] = [[i + 1, 0, 0, 0, 0, 0]]
    
 cargaU(USUARIOS)
+
+duenos = [0]*50
+a = 0
+for i in USUARIOS:
+    if i[3] == "dueño":
+        duenos[a] = i[0]
+        a = a + 1
 
 def separacion():
     print('-----------------------------------------------------------------------------------------')
@@ -138,10 +144,9 @@ def menuPrincipalAdmin():
             print("Saliendo.")
         case '1':
             gestionDeLocales()
-            x = int(input("Seguir: "))
-            while x != 0:
+            x = input("Seguir: ").lower()
+            if x != "Si":
                 gestionDeLocales()
-                x = int(input("Seguir: "))
         case '2':
             print("En construcción...")
             menuPrincipalAdmin() 
@@ -154,9 +159,73 @@ def menuPrincipalAdmin():
             print("En construcción...")
             menuPrincipalAdmin()
     
+def buscarLocalD(x,y,z):
+    global m
+    loc = ordenadoC(x, y, 0, 6)
+    com = 0
+    fin = c - 1
+    while com <= fin:
+        med = (com + fin) // 2
+        if loc[med][0] == z:
+            print(loc[med])
+            m = med
+            return True
+        elif loc[med][0] > z:
+            fin = med - 1
+        else:
+            com = med + 1
+    return False
+    
+def modificacion(x,y):
+    global duenos
+    print("1- Nombre: ", x[y][1])
+    print("2- Ubicación: ", x[y][2])
+    print("3- Rubro: ", x[y][3])
+    print("4- Codigo de usuario: ", str(x[y][4]))
+    pos = int(input("Dato a modificar? (1,2,3,4): "))
+    while pos not in [1,2,3,4]:
+        pos = int(input("Dato a modificar? (1,2,3,4): "))
+    match pos: 
+        case 4:
+            codigo = int(input("-> "))   
+            while codigo not in duenos or codigo == 0:
+                codigo = int(input("->  "))
+            x[y][pos] = codigo
+        case 3:
+            print('''
+            a- Indumentaria.
+            b- Perfumería.
+            c- Gastronomía.
+            ''')
+            b = input("-> ").lower()
+            while b not in ["a", "b", "c"]:
+                print('Selección no válida.')
+                b = input("-> ").lower()            
+            match b:
+                case "a":
+                    b = "Indumentaria."
+                case "b":
+                    b = "Perfumería."
+                case "c":
+                    b = "Gastronomía."  
+            x[y][pos] = b
+        case 2:
+            x[y][pos] = input("-> ")   
+        case 1:
+            auxN = False
+            while auxN == False:
+                nombre = input("Ingrese el nombre del nuevo local: ")
+                auxN = True
+                for i in range(c):
+                    if nombre == locales[i][1]:
+                        auxN = False
+            x[y][pos] = nombre
+            
+    
+    
 # Procedure que permite al admin administrar nuevos locales
 def gestionDeLocales():
-        global locales, c, ind, perf, com
+        global locales, c, ind, perf, com, duenos
         print('''
             a) Crear locales.
             b) Modificar local.
@@ -164,18 +233,28 @@ def gestionDeLocales():
             d) Mapa de locales.
             e) Volver.
         ''')
+        
         eleccion = input("Seleccione una opción: ")
-        while eleccion != 'a' and eleccion != 'b' and eleccion != 'c' and eleccion != 'd':
+        while eleccion != 'a' and eleccion != 'b' and eleccion != 'c' and eleccion != 'd' and eleccion != 'e':
             print("Elección no válida.")
             eleccion = input("Seleccione una opción: ")
+            
         match eleccion:
             case 'a':
                 verlos = input("Desea ver los locales ya cargados? Si/No: ")
-                if verlos == "si" or verlos == "Si":
+                if verlos == "si":
                     print("Todos los locales: ")
-                    for l in range(0, c): 
+                    for l in range(c):
                         print(locales[l])
-                nombre = input("Ingrese el nombre del nuevo local: ")
+
+                auxN = False
+                while auxN == False:
+                    nombre = input("Ingrese el nombre del nuevo local: ")
+                    auxN = True
+                    for i in range(c):
+                        if nombre == locales[i][1]:
+                            auxN = False
+
                 ubicacion = input("Ingrese la ubicación: ")
                 print('''
                       a- Indumentaria.
@@ -189,44 +268,78 @@ def gestionDeLocales():
                 match rubro:
                     case "a":
                         rubro = "Indumentaria."
-                        ind = ind + 1
                     case "b":
                         rubro = "Perfumería."
-                        perf = perf + 1                                        
                     case "c":
                         rubro = "Gastronomía."
-                        com = com + 1
-                locales[c] = [c+1, nombre, ubicacion, rubro, codU] 
+                
+                codD = int(input("Código de dueño de local: "))
+                while codD not in duenos or codD == 0:
+                    codD = int(input("Código de dueño de local: "))
+                
+                locales[c] = [c+1, nombre, ubicacion, rubro, codD, "A"] 
                 separacion()
                 maxMinLocales(c)
                 c = c + 1
-                locales = ordenadoC(locales, c, 1, 5) 
+                locales = ordenadoC(locales, c, 1, 6) 
                 menuPrincipalAdmin()
-            case 'b': 
-                verlos = input("Desea ver los locales ya cargados? Si/No")
-                if verlos == "Si":
-                    for l in locales: 
-                        print(l)                
-                print("En construcción...")
-                locales = ordenado(locales, c, 1) 
-                menuPrincipalAdmin()
-            case 'c':
-                verlos = input("Desea ver los locales ya cargados? Si/No")
-                locales = ordenadoD(locales, c, 1) 
-                if verlos == "Si":
+            case 'b': ## HACER
+                verlos = input("Desea ver los locales ya cargados? Si/No: ")
+                if verlos == "si":
                     print("Todos los locales: ")
-                    for l in locales: 
-                        print(l)
-                print("En construcción...")
+                    for i in range(c): 
+                        print(locales[i])
+                
+                m = 0
+                cod = int(input("Código de negocio a modificar: "))
+                enc = buscarLocalD(locales, c, cod)
+                while enc == False:
+                    cod = int(input("Código de negocio a modificar: "))
+                if locales[m][5] == "A":
+                    modificacion(locales, m)
+                else:
+                    print("Desea activar el estado del local? ")
+                    el = input("-> ")
+                    if el == "si":
+                        locales[m][5] = "A"                    
+                locales = ordenadoD(locales, c, 1, 6) 
+                maxMinLocales(c)
                 menuPrincipalAdmin()
-            case 'd': #seguir esto
-                verlos = input("Desea ver los locales ya cargados? Si/No")
-                if verlos == "Si" or verlos == "si":
+            case 'c': ## HACER
+                verlos = input("Desea ver los locales ya cargados? Si/No: ")
+                locales = ordenadoD(locales, c, 1, 6) 
+                if verlos == "si":
                     print("Todos los locales: ")
-                    for l in locales: 
-                        print(l)
+                    for l in range(c):
+                        print(locales[l])
+                m = 0
+                cod = int(input("Código de negocio a dar de baja: "))
+                enc = buscarLocalD(locales, c, cod)
+                while enc == False:
+                    cod = int(input("Código de negocio a dar de baja: "))
+                if locales[m][5] == "A":
+                    print("Desea confirmar eliminar el local: ")
+                    print(locales[m])
+                    elec = input("->  ").lower()
+                    if elec == "si":
+                        locales[m][5] = "B"
+                else: 
+                    print("El local numero:",str(locales[m][0]), locales[m][1],"ya está dado de baja.")
+
+                
                 menuPrincipalAdmin()
- 
+            case 'd': 
+                verlos = input("Desea ver los locales ya cargados? Si/No")
+                while verlos != "si" or verlos != "Si" or verlos !="No" or verlos != "no":
+                    if verlos == "si":
+                        print("Todos los locales: ")
+                        for l in range(0, c): 
+                            print(locales[l])
+                menuPrincipalAdmin()
+            case 'e':
+                print("Volviendo... ")
+                menuPrincipalAdmin()
+                           
 # Procedure que permite al admin administrar novedades, en construcción 
 def gestionDeNovedades():
     print('''
@@ -266,7 +379,22 @@ def menuPrincipalDue():
         3- Reporte de uso de descuentos.
         0- Salir.
     ''')
-    #en construccion y volver
+    eleccion = input("Seleccione una número: ")
+    while eleccion != '1' and eleccion != '2' and eleccion != '3' and eleccion != '0':
+        print("Elección no válida.")
+        eleccion = input("Seleccione una opción: ")
+    match eleccion:
+        case '0':
+            print("Saliendo.")
+        case '1':
+            print("En construcción...")
+            menuPrincipalDue()
+        case '2':
+            print("En construcción...")
+            menuPrincipalDue()
+        case '3':
+            print("En construcción...")
+            menuPrincipalDue()
 
 def menuPrincipalCli():
     print('''
@@ -276,12 +404,37 @@ def menuPrincipalCli():
         4- Ver novedades.
         0- Salir.
     ''')
-    #en construccion y volver
+    eleccion = input("Seleccione una número: ")
+    while eleccion != '1' and eleccion != '2' and eleccion != '3' and eleccion != '4' and eleccion != '0':
+        print("Elección no válida.")
+        eleccion = input("Seleccione una opción: ")
+    match eleccion:
+        case '0':
+            print("Saliendo.")
+        case '1':
+            print("En construcción...")
+            menuPrincipalCli()
+        case '2':
+            print("En construcción...")
+            menuPrincipalCli()
+        case '3':
+            print("En construcción...")
+            menuPrincipalCli()
+        case '4':
+            print("En construcción...")
+            menuPrincipalCli()
     
- 
 # Qué rubro tiene más y menos locales    
 def maxMinLocales(x):
     global ind, perf, com
+    for i in range(c):
+        match locales[i][3]:
+            case "Indumentaria":
+                ind = ind + 1
+            case "Perfumería":
+                perf = perf + 1
+            case "Gastronomía":
+                com = com + 1
     r = [[1, ind], [2, perf], [3, com]]
     r = ordenadoD(r, 3, 1, 2)
     for i in range(c+1):
@@ -299,12 +452,11 @@ def maxMinLocales(x):
     separacion()
                 
 if aux == 1:
-    #print("Bienvenido!")
-    print(tdc)
+    print("Bienvenido "+tdc+"!")
     match tdc:
         case "administrador":
             menuPrincipalAdmin()
         case "cliente":
-            menuPrincipalDue()
-        case "dueño":
             menuPrincipalCli()
+        case "dueño":
+            menuPrincipalDue()
