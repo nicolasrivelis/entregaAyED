@@ -45,14 +45,11 @@ c = 0
 ind = 0
 perf = 0
 com = 0   
-
-for i in range(50):
-    locales[i] = [[i + 1, 0, 0, 0, 0, 0]]
+a = 0
    
 cargaU(USUARIOS)
 
 duenos = [0]*50
-a = 0
 for i in USUARIOS:
     if i[3] == "dueño":
         duenos[a] = i[0]
@@ -329,12 +326,21 @@ def gestionDeLocales():
                 
                 menuPrincipalAdmin()
             case 'd': 
-                verlos = input("Desea ver los locales ya cargados? Si/No")
-                while verlos != "si" or verlos != "Si" or verlos !="No" or verlos != "no":
-                    if verlos == "si":
-                        print("Todos los locales: ")
-                        for l in range(0, c): 
-                            print(locales[l])
+                verlos = input("Desea ver los locales ya cargados? Si/No: ")
+                print(locales)
+                locales = ordenadoC(locales, c, 1, 6) 
+                if verlos == "si":
+                    print("Todos los locales: ")
+                    for l in range(c):
+                        print(locales[l])
+                a = 0
+                cods = []*0 
+                # for i in range(50):
+                #     cods[i]
+                for i in range(10):
+                    print("+-+-+-+-+-+")
+                    print("|"+str(locales[a][0])+"|"+str(locales[a+1][0])+"|"+str(locales[a+2][0])+"|"+str(locales[a+3][0])+"|"+str(locales[a+4][0])+"|")
+                    a = a + 5
                 menuPrincipalAdmin()
             case 'e':
                 print("Volviendo... ")
