@@ -1,8 +1,9 @@
-# Carpeta que permite ocultar la contraseña al ingresarla
+# Carpeta que permite ocultar la contraseña al ingresarla.
 import getpass
 
 USUARIOS = []
 
+# Carga de los usuarios que utilizarían el programa.
 def cargaU(arr):
     us = []
     us.append(1) 
@@ -35,7 +36,7 @@ def cargaU(arr):
     us.append("administrador") 
     arr.append(us)
     
-# Declaración de contadores de rubros, y de auxiliares para la validación de usuario  
+# Declaración de contadores de rubros, y de auxiliares para la validación de usuario.  
 intentos = 1
 aux = 0
 tdc = ""
@@ -49,6 +50,7 @@ a = 0
    
 cargaU(USUARIOS)
 
+# Procedure de creación de lista con los id de los dueños existentes. 
 duenos = [0]*50
 for i in USUARIOS:
     if i[3] == "dueño":
@@ -57,7 +59,8 @@ for i in USUARIOS:
 
 def separacion():
     print('-----------------------------------------------------------------------------------------')
-   
+  
+# Procedures que ordenan listas de manera creciente y decreciente. 
 def ordenadoC(N, filas, ref, col):
     for i in range(0, filas-1):
         for j in range(i+1, filas):
@@ -77,54 +80,12 @@ def ordenadoD(N, filas, ref, col):
                     N[i][k] = N[j][k]
                     N[j][k] = aux    
     return N
-   
-# Respuesta ante ingreso de datos de usuario
-def validacion():
-    global tdc, codU
-    usuario_ingresado = input("Usuario: ") 
-    contrasena_ingresada = input('Contraseña: ')
-    auxU = False
-    auxC = False
-    aux = False
-   
-    for user in USUARIOS:
-        if user[1] == usuario_ingresado:
-            auxU = True
-        if user[2] == contrasena_ingresada:
-            auxC = True
-        if user[1] == usuario_ingresado and user[2] == contrasena_ingresada:
-            tdc = user[3]
-            codU = user[0] 
-            return True
-            
-    if auxU == False and auxC == True:
-        print("Usuario")
-    elif auxU == True and auxC == False:
-        print("Contra")
-    if auxU == False and auxC == False:
-        print("Todo mal")
-
-    
-    if aux == False: return False 
-    
-validado = validacion()
-   
-# Validación de datos de usuario con variables auxiliares
-while intentos != 3:
-    print(intentos)
-    if validado:
-        aux = 1
-        intentos = 3
-    else:    
-        intentos = intentos + 1
-        validado = validacion()
-        print(validado)
-    if intentos == 3 and aux == 0:
-        print("Fuera de intentos!")
                   
-# Menu Principal donde usuario puede hacer lo que quiera
+# Menu Principal donde un administrador de local puede hacer lo que quiera.
 def menuPrincipalAdmin():
     print('''
+    Opciones de Menú principal de Administradores:
+
         1- Gestión de locales.
         2- Crear cuenta de dueños de locales.
         3- Aprobar/Denegar solicitudes de cuentas.
@@ -155,7 +116,8 @@ def menuPrincipalAdmin():
         case '5':
             print("En construcción...")
             menuPrincipalAdmin()
-    
+   
+# Localizacion de id de dueños para el ingreso de locales a la lista.    
 def buscarLocalD(x,y,z):
     global m
     loc = ordenadoC(x, y, 0, 6)
@@ -172,7 +134,8 @@ def buscarLocalD(x,y,z):
         else:
             com = med + 1
     return False
-    
+
+# Procedure donde el usuario modifica algún campo de un local seleccionado previamente.
 def modificacion(x,y):
     global duenos
     y = y + 1
@@ -218,18 +181,18 @@ def modificacion(x,y):
                     if nombre == locales[i][1]:
                         auxN = False
             x[y][pos] = nombre
-            
-    
-    
-# Procedure que permite al admin administrar nuevos locales
+                
+# Procedure que permite al admin administrar nuevos locales.
 def gestionDeLocales():
         global locales, c, ind, perf, com, duenos
         print('''
-            a) Crear locales.
-            b) Modificar local.
-            c) Eliminar local.
-            d) Mapa de locales.
-            e) Volver.
+            Opciones de gestión de locales:
+            
+                a) Crear locales.
+                b) Modificar local.
+                c) Eliminar local.
+                d) Mapa de locales.
+                e) Volver.
         ''')
         
         eleccion = input("Seleccione una opción: ")
@@ -281,7 +244,7 @@ def gestionDeLocales():
                 c = c + 1
                 locales = ordenadoC(locales, c, 1, 6) 
                 menuPrincipalAdmin()
-            case 'b': ## HACER
+            case 'b':
                 verlos = input("Desea ver los locales ya cargados? Si/No: ")
                 if verlos == "si":
                     print("Todos los locales: ")
@@ -303,7 +266,7 @@ def gestionDeLocales():
                 locales = ordenadoD(locales, c, 1, 6) 
                 maxMinLocales(c)
                 menuPrincipalAdmin()
-            case 'c': ## HACER
+            case 'c': 
                 verlos = input("Desea ver los locales ya cargados? Si/No: ")
                 locales = ordenadoD(locales, c, 1, 6) 
                 if verlos == "si":
@@ -328,16 +291,12 @@ def gestionDeLocales():
                 menuPrincipalAdmin()
             case 'd': 
                 verlos = input("Desea ver los locales ya cargados? Si/No: ")
-                print(locales)
                 locales = ordenadoC(locales, c, 1, 6) 
                 if verlos == "si":
                     print("Todos los locales: ")
                     for l in range(c):
                         print(locales[l])
                 a = 0
-                cods = []*0 
-                # for i in range(50):
-                #     cods[i]
                 for i in range(10):
                     print("+-+-+-+-+-+")
                     print("|"+str(locales[a][0])+"|"+str(locales[a+1][0])+"|"+str(locales[a+2][0])+"|"+str(locales[a+3][0])+"|"+str(locales[a+4][0])+"|")
@@ -347,9 +306,11 @@ def gestionDeLocales():
                 print("Volviendo... ")
                 menuPrincipalAdmin()
                            
-# Procedure que permite al admin administrar novedades, en construcción 
+# Procedure que permite al admin administrar novedades, en construcción.
 def gestionDeNovedades():
     print('''
+        Opciones de gestion de novedades: 
+        
           a- Crear novedades.
           b- Modificar novedades.
           c- Eliminar novedades.
@@ -375,8 +336,11 @@ def gestionDeNovedades():
         case 'e':
             menuPrincipalAdmin()    
 
+# Menu Principal donde un dueño de local puede hacer lo que quiera, todavía en construcción.
 def menuPrincipalDue():
     print('''
+    Menu principal para dueños: 
+          
         1- Gestión de Descuentos.
           a) Crear descuento para mi local
           b) Modificar descuento de mi local
@@ -403,8 +367,11 @@ def menuPrincipalDue():
             print("En construcción...")
             menuPrincipalDue()
 
+# Menu Principal donde un cliente puede hacer lo que quiera, todavía en construcción.
 def menuPrincipalCli():
     print('''
+    Menu principal para cliente:
+          
         1- Registrarme.
         2- Buscar descuentos en locales.
         3- Solicitar descuento.
@@ -431,7 +398,7 @@ def menuPrincipalCli():
             print("En construcción...")
             menuPrincipalCli()
     
-# Qué rubro tiene más y menos locales    
+# Listado decreciente de los rubros más frecuentes. 
 def maxMinLocales(x):
     global ind, perf, com
     for i in range(c):
@@ -457,8 +424,52 @@ def maxMinLocales(x):
                 print("Gastronomía: ", str(com))
                 
     separacion()
-                
+
+# Respuesta ante ingreso de datos de usuario.
+def validacion():
+    global tdc, codU
+    usuario_ingresado = input("Usuario: ") 
+    contrasena_ingresada = input('Contraseña: ')
+    auxU = False
+    auxC = False
+    aux = False
+   
+    for user in USUARIOS:
+        if user[1] == usuario_ingresado:
+            auxU = True
+        if user[2] == contrasena_ingresada:
+            auxC = True
+        if user[1] == usuario_ingresado and user[2] == contrasena_ingresada:
+            tdc = user[3]
+            codU = user[0] 
+            return True
+            
+    if auxU == False and auxC == True:
+        print("Usuario")
+    elif auxU == True and auxC == False:
+        print("Contra")
+    if auxU == False and auxC == False:
+        print("Todo mal")
+        
+    if aux == False: return False 
+    
+validado = validacion()
+   
+# Validación de datos de usuario con variables auxiliares.
+while intentos != 3:
+    if validado:
+        aux = 1
+        intentos = 3
+    else:    
+        intentos = intentos + 1
+        validado = validacion()
+        print(validado)
+    if intentos == 3 and aux == 0:
+        print("Fuera de intentos!")
+
+# Una vez validado el ingreso, se redirige al usuario al menú correspondiente.
 if aux == 1:
+    print("")
     print("Bienvenido "+tdc+"!")
     match tdc:
         case "administrador":
