@@ -175,6 +175,7 @@ def buscarLocalD(x,y,z):
     
 def modificacion(x,y):
     global duenos
+    y = y + 1
     print("1- Nombre: ", x[y][1])
     print("2- Ubicación: ", x[y][2])
     print("3- Rubro: ", x[y][3])
