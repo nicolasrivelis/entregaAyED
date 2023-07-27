@@ -200,6 +200,7 @@ def gestionDeLocales():
         eleccion = input("Seleccione una opción: ")
         while eleccion != 'a' and eleccion != 'b' and eleccion != 'c' and eleccion != 'd' and eleccion != 'e':
             print("Elección no válida.")
+            print("")
             eleccion = input("Seleccione una opción: ")
             
         match eleccion:
@@ -279,7 +280,7 @@ def gestionDeLocales():
                 print("Redirigiendo al menu principal...")
                 menuPrincipalAdmin()
             case 'c': 
-                x = "si":
+                x = "si"
                 while x == "si":
                     verlos = input("Desea ver los locales ya cargados? Si/No: ")
                     locales = ordenadoD(locales, c, 1, 6) 
@@ -334,7 +335,7 @@ def gestionDeNovedades():
     separacion()
     eleccion = input('Seleccione una opción: ')
     separacion()
-    while eleccion != 'a' or eleccion != 'b' or eleccion != 'c' or eleccion != 'd' or eleccion != 'e':
+    while eleccion != 'a' and eleccion != 'b' and eleccion != 'c' and eleccion != 'd' and eleccion != 'e':
             print("Elección no válida.")
             eleccion = input('Seleccione una opción: ')
             separacion()
